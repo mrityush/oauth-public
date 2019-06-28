@@ -1,0 +1,216 @@
+buildscript {
+
+    ext {
+        springBootVersion = '1.5.6.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
+        classpath("com.github.samueltbrown:gradle-cucumber-plugin:0.9")
+    }
+}
+
+//// File: build.gradle
+//plugins {
+//    // Add Git properties plugin.
+//    id 'com.gorylenko.gradle-git-properties' version '1.4.17'
+//}
+//
+//// Customize Git properties plugin.
+//gitProperties {
+//    // Change date format in git.properties file.
+//    dateFormat = "yyyy-MM-dd HH:mm:ssZ"
+//    dateFormatTimeZone = 'IST'
+//    keys = ['git.branch','git.commit.id','git.commit.time','git.tags']
+//}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://repo.spring.io/libs-snapshot'
+    }
+    maven {
+        url  "http://dl.bintray.com/dmahapatro/plugins"
+    }
+    maven {
+        url 'http://172.16.3.185:8081/artifactory/gradle-dev-local'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
+apply plugin: 'com.github.samueltbrown.cucumber'
+
+jar {
+    baseName = rootProject.name.toLowerCase()
+    //version =  '0.1.0'
+    version = null
+
+    manifest {
+        attributes 'Main-Class': 'MainApplication'
+        attributes 'JS-Service-Name': rootProject.name
+        attributes 'JS-Build-Date': new Date()
+        attributes 'JS-CI-Url': System.getenv('JOB_URL') ?: 'NA'
+        attributes 'JS-CI-Tag': System.getenv('BUILD_TAG') ?: 'NA'
+        attributes 'JS-Git-Url': System.getenv('GIT_URL') ?: 'NA'
+        attributes 'JS-Git-Branch': System.getenv('GIT_BRANCH') ?: 'NA'
+        attributes 'JS-Git-Commit': System.getenv('GIT_COMMIT') ?: 'NA'
+    }
+}
+
+springBoot {
+    executable = true
+    buildInfo()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+/*
+ * Overriding default hibernate version for following bug -
+ * https://hibernate.atlassian.net/browse/HHH-11134
+ * Alternative way to upgrade hibernate dependency :
+ *	Exclude transitive dependency - 'org.springframework.data:spring-data-jpa'
+ *	from 'org.springframework.boot:spring-boot-starter-data-jpa'
+ *	and separately include 'org.springframework.data:spring-data-jpa:2.0.0.RELEASE'
+ *	which provides 'org.hibernate:hibernate-core:5.2.11.Final'
+ */
+ext['hibernate.version'] = '5.2.11.Final'
+dependencies {
+    compile("com.js.orchestration:JsOrchestration:1.0.+")
+    compile("org.springframework.security.oauth:spring-security-oauth2")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.data:spring-data-redis:1.8.20.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.jolokia:jolokia-core")
+    compile("redis.clients:jedis:2.9.0")
+
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    // end::jetty[]
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '1.1.1'
+
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+    compile('org.springframework.boot:spring-boot-starter-jersey')
+    compile('org.apache.cxf:cxf-rt-rs-client:3.1.7')
+    compile 'com.google.code.gson:gson:2.2.4'
+
+    compile('org.hibernate:hibernate-hikaricp:4.3.11.Final')
+
+    runtime('mysql:mysql-connector-java')
+
+    compile("io.springfox:springfox-swagger2:2.0.2")
+    compile("io.springfox:springfox-swagger-ui:2.0.2")
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    compile 'org.projectlombok:lombok:1.16.18'
+
+    //compile('org.springframework.cloud:spring-cloud-starter-config')
+    compile('org.springframework.cloud:spring-cloud-starter')
+
+    compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.3'
+    compile group: 'io.rest-assured', name: 'json-schema-validator', version: '3.0.3'
+
+    testCompile("info.cukes:cucumber-spring:1.2.2")
+    testCompile("info.cukes:cucumber-java8:1.2.2")
+    testCompile("info.cukes:cucumber-junit:1.2.2")
+
+    compile("ch.qos.logback.contrib:logback-json-classic:0.1.5")
+    compile("ch.qos.logback.contrib:logback-jackson:0.1.5")
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR5"
+    }
+}
+
+
+eclipse {
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Java :: consumer :: SonarQube Scanner for Gradle"
+        property "sonar.projectKey", "org.sonarqube:consumer"
+        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+    }
+}
+allprojects {
+    ext.baseVersion = "0.1"
+    ext.snapshotVersion = true
+
+    group = "org.sonarqube"
+    version = "$baseVersion" + (snapshotVersion ? "-SNAPSHOT" : "")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+test {
+    ignoreFailures = true
+}
+
+test.finalizedBy jacocoTestReport
+task cleanDist(type: Delete) {
+    delete fileTree('build/dist') {
+        include '**/*'
+    }
+}
+
+task CopyTask(type: Copy) {
+    from('build/libs'){
+        include '*.jar'
+    }
+    from('.') {
+        include 'application*.properties'
+    }
+    from 'logback.xml'
+    from 'consumer'
+    into 'build/dist'
+}
+
+task distZip(type: Zip, dependsOn: 'CopyTask') {
+    from 'build/dist'
+    exclude '*.zip'
+    archiveName 'build.zip'
+    destinationDir = file('build/dist')
+}
+
+cucumber {
+    formats = ['pretty', 'json:build/cucumber/cucumber.json', 'junit:build/cucumber/cucumber.xml', 'html:build/cucumber/html']
+    tags = ['~@Ignore']
+}

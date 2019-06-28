@@ -1,0 +1,59 @@
+facebook:
+  client:
+    clientId: 1507893642589170
+    clientSecret: ce4457988da9c6512dd9996445be17d7
+#    clientId: 233668646673605
+#    clientSecret: 33b17e044ee6a4fa383f46ec6e28ea1d
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+    scope:
+      - email
+      - public_profile
+  resource:
+    userInfoUri: https://graph.facebook.com/me
+    userImageUri: https://graph.facebook.com/{0}/?fields=picture&type=large
+  entity:
+    idKey: id
+    emailKey: email
+    nameKey: name
+    firstNameKey: first_name
+    lastNameKey: last_name
+    profileKey: link
+    imageKey: picture
+    localeKey: locale
+    isAccountVerifiedKey: verified
+
+
+google:
+  client:
+    clientId: 932102901327-cr94u9vt7gqp6512cg92ab0j42v13fg3.apps.googleusercontent.com
+    clientSecret: z8TzrXxrIq8-ystbMnSAA3nY
+    accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+    scope:
+      - openid
+      - email
+      - profile
+  resource:
+    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+    userImageUri:
+    preferTokenInfo: true
+  entity:
+      idKey: sub
+      emailKey: email
+      nameKey: name
+      firstNameKey: given_name
+      lastNameKey: family_name
+      profileKey: profile
+      imageKey: picture
+      localeKey: locale
+      isAccountVerifiedKey: email_verified
+
+logging:
+  level:
+    org.springframework.security: ERROR
