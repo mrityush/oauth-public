@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -21,6 +22,7 @@ import java.util.Locale;
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
+@EnableOAuth2Sso
 @ComponentScan("com.src.oauth2.*")
 //public class MainApplication {
 public class MainApplication extends WebMvcConfigurerAdapter {
