@@ -1,5 +1,7 @@
 package com.src.oauth2;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -63,12 +65,24 @@ public class MainApplication extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public DataSource datasource() {
-		org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
-		ds.setDriverClassName(databaseDriverClassName);
-		ds.setUrl(datasourceUrl);
-		ds.setUsername(databaseUsername);
-		ds.setPassword(databasePassword);
 
+		final HikariConfig config = new HikariConfig();
+		config.setJdbcUrl(datasourceUrl);
+		config.setUsername(databaseUsername);
+		config.setPassword(databasePassword);
+		config.setDriverClassName(databaseDriverClassName);
+
+//		config.setConnectionTimeout(Integer.parseInt(env.getProperty("app.mdb.datasource.connection-timeout")));
+//		config.setMinimumIdle(Integer.parseInt(env.getProperty("app.mdb.datasource.minimum-idle-connections")));
+//		config.setIdleTimeout(Integer.parseInt(env.getProperty("app.mdb.datasource.connection-idle-timeout")));
+
+		config.addDataSourceProperty("cachePrepStmts", "true");
+		config.addDataSourceProperty("prepStmtCacheSize", "250");
+		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+		final HikariDataSource ds = new HikariDataSource(config);
+
+//		ds.setMaximumPoolSize(Integer.parseInt(env.getProperty("app.mdb.datasource.maximum-pool-size")));
 		return ds;
 	}
 
