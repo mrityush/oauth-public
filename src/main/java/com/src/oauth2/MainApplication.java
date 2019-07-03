@@ -1,15 +1,15 @@
 package com.src.oauth2;
 
+import com.src.oauth2.config.oauth.AppProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.LocaleResolver;
@@ -24,8 +24,9 @@ import java.util.Locale;
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
-@EnableOAuth2Sso
 @ComponentScan("com.src.oauth2.*")
+@EnableConfigurationProperties(AppProperties.class)
+
 //public class MainApplication {
 public class MainApplication extends WebMvcConfigurerAdapter {
 
@@ -47,11 +48,11 @@ public class MainApplication extends WebMvcConfigurerAdapter {
 	@Value("${spring.datasource.url}")
 	private String datasourceUrl;
 
-	@Value("${redis.host.url}")
-	private String redisHostUrl;
-
-	@Value("${redis.port}")
-	private Integer redisPort;
+//	@Value("${redis.host.url}")
+//	private String redisHostUrl;
+//
+//	@Value("${redis.port}")
+//	private Integer redisPort;
 
 //	@Override
 //	public void addInterceptors(InterceptorRegistry registry) {
@@ -100,13 +101,13 @@ public class MainApplication extends WebMvcConfigurerAdapter {
 		return slr;
 	}
 
-	@Bean
-	JedisConnectionFactory jedisConnectionFactory() {
-		JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
-		jedisConFactory.setHostName(redisHostUrl);
-		jedisConFactory.setPort(redisPort);
-		return jedisConFactory;
-	}
+//	@Bean
+//	JedisConnectionFactory jedisConnectionFactory() {
+//		JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
+//		jedisConFactory.setHostName(redisHostUrl);
+//		jedisConFactory.setPort(redisPort);
+//		return jedisConFactory;
+//	}
 
 
 	@Bean
