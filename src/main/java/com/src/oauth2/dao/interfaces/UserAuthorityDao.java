@@ -10,5 +10,5 @@ import java.util.List;
  * Created by Priya on 19/3/17.
  */
 public interface UserAuthorityDao extends BaseDao<UserAuthority, UserAuthoritySearchFilter> {
-    List<UserAuthority> getUserAuthorities(RegisteredUser registeredUser);
+	List<UserAuthority> getUserAuthorities(RegisteredUser registeredUser);
 }

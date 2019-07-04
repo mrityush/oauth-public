@@ -16,43 +16,43 @@ import javax.transaction.Transactional;
 @Service(value = "socialService")
 public class SocialService {
 
-    @Autowired
-    private RegisteredUserRepository registeredUserRepository;
+	@Autowired
+	private RegisteredUserRepository registeredUserRepository;
 
-    @Autowired
-    private UserAuthorityRepository userAuthorityRepository;
+	@Autowired
+	private UserAuthorityRepository userAuthorityRepository;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Transactional
-    public void save(UserAuthority userAuthority) {
-        RegisteredUser registeredUser = userAuthority.getUser();
-        if (registeredUserRepository.findByEmail(registeredUser.getEmail()).size() == 0) {
-            userAuthorityRepository.save(userAuthority);
-            userService.sendWelcomeEmail(userAuthority);
-        }
-    }
+	@Transactional
+	public void save(UserAuthority userAuthority) {
+		RegisteredUser registeredUser = userAuthority.getUser();
+		if (registeredUserRepository.findByEmail(registeredUser.getEmail()).size() == 0) {
+			userAuthorityRepository.save(userAuthority);
+			userService.sendWelcomeEmail(userAuthority);
+		}
+	}
 
-    public String getUserFirstName(UserAuthority userAuthority, String replaceableFirstName) {
-        RegisteredUser registeredUser = userAuthority.getUser();
-        if (registeredUserRepository.findByEmail(registeredUser.getEmail()).size() == 0) {
-            return replaceableFirstName;
-        }else{
-            return registeredUser.getFirstName();
-        }
-    }
+	public String getUserFirstName(UserAuthority userAuthority, String replaceableFirstName) {
+		RegisteredUser registeredUser = userAuthority.getUser();
+		if (registeredUserRepository.findByEmail(registeredUser.getEmail()).size() == 0) {
+			return replaceableFirstName;
+		} else {
+			return registeredUser.getFirstName();
+		}
+	}
 
-    public String getUserImageKey(UserAuthority userAuthority, String replaceabeImageKey) {
-        RegisteredUser registeredUser = userAuthority.getUser();
-        if (registeredUserRepository.findByEmail(registeredUser.getEmail()).size() == 0) {
-            return replaceabeImageKey;
-        }else{
-            return registeredUserRepository.findByEmail(registeredUser.getEmail()).get(0).getPhotoUrl();
-        }
-    }
+	public String getUserImageKey(UserAuthority userAuthority, String replaceabeImageKey) {
+		RegisteredUser registeredUser = userAuthority.getUser();
+		if (registeredUserRepository.findByEmail(registeredUser.getEmail()).size() == 0) {
+			return replaceabeImageKey;
+		} else {
+			return registeredUserRepository.findByEmail(registeredUser.getEmail()).get(0).getPhotoUrl();
+		}
+	}
 
-    public String getReferralCodeForUser(RegisteredUser user) {
-        return userService.getReferralCodeForUser(user);
-    }
+	public String getReferralCodeForUser(RegisteredUser user) {
+		return userService.getReferralCodeForUser(user);
+	}
 }

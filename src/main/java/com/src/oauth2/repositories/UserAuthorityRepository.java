@@ -16,10 +16,10 @@ import java.util.List;
  */
 @Repository
 public interface UserAuthorityRepository extends CrudRepository<UserAuthority, Long> {
-    Page<UserAuthority> findAll(Pageable pageable);
+	Page<UserAuthority> findAll(Pageable pageable);
 
-    List<UserAuthority> findByUser(RegisteredUser registeredUser);
+	List<UserAuthority> findByUser(RegisteredUser registeredUser);
 
-    @Query(value = "select * from authorities where username = :username", nativeQuery = true)
-    List<UserAuthority> findByUsername(@Param("username") String username);
+	@Query(value = "select * from authorities where username = :username", nativeQuery = true)
+	List<UserAuthority> findByUsername(@Param("username") String username);
 }
