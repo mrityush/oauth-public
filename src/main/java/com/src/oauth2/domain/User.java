@@ -1,10 +1,11 @@
 package com.src.oauth2.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.src.oauth2.domain.entity.CommonVersionEntity;
 import lombok.Data;
-import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
@@ -14,7 +15,11 @@ import java.util.Set;
 		@UniqueConstraint(columnNames = "email")
 })
 @Data
-public class User implements Serializable {
+public class User extends CommonVersionEntity implements Serializable {
+	public User() {
+		super();
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
