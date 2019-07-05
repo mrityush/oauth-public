@@ -8,23 +8,23 @@ import java.util.Calendar;
 
 
 @MappedSuperclass
-public abstract class CommonDataEntity extends  CommonVersionEntity {
+public abstract class CommonDataEntity extends CommonVersionEntity {
 
-    public CommonDataEntity() {
-        this.setDateCreated(Calendar.getInstance().getTime());
-        this.setLastUpdated(Calendar.getInstance().getTime());
-    }
+	public CommonDataEntity() {
+		this.setDateCreated(Calendar.getInstance().getTime());
+		this.setLastUpdated(Calendar.getInstance().getTime());
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 }

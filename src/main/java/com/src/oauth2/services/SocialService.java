@@ -1,11 +1,14 @@
 package com.src.oauth2.services;
 
 import com.src.oauth2.domain.RegisteredUser;
+import com.src.oauth2.domain.UserAuthority;
 import com.src.oauth2.repositories.RegisteredUserRepository;
 import com.src.oauth2.repositories.UserAuthorityRepository;
 import com.src.oauth2.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 /**
  * Created by mj on 27/06/19
@@ -13,14 +16,14 @@ import org.springframework.stereotype.Service;
 @Service(value = "socialService")
 public class SocialService {
 
-    @Autowired
-    private RegisteredUserRepository registeredUserRepository;
+	@Autowired
+	private RegisteredUserRepository registeredUserRepository;
 
-    @Autowired
-    private UserAuthorityRepository userAuthorityRepository;
+	@Autowired
+	private UserAuthorityRepository userAuthorityRepository;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
 //    @Transactional
 //    public void save(UserAuthority userAuthority) {
@@ -49,7 +52,7 @@ public class SocialService {
 //        }
 //    }
 
-    public String getReferralCodeForUser(RegisteredUser user) {
-        return userService.getReferralCodeForUser(user);
-    }
+	public String getReferralCodeForUser(RegisteredUser user) {
+		return userService.getReferralCodeForUser(user);
+	}
 }

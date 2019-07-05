@@ -10,15 +10,15 @@ import java.util.List;
  * Created by mj on 25/5/16.
  */
 public interface BaseDao<T extends BaseEntity, U extends BaseItemFilter<T>> {
-    List<T> findItems(U u);
+	List<T> findItems(U u);
 
-    void save(T t);
+	void save(T t);
 
-    void update(T t);
+	void update(T t);
 
-    T get(Long id);
+	T get(Long id);
 
-    List<T> findAll();
+	List<T> findAll();
 
-    long count();
+	long count();
 }

@@ -11,23 +11,23 @@ import java.util.Set;
  * Created by Priya on 11/3/2017
  */
 public interface RegisteredUserDao extends BaseDao<RegisteredUser, RegisteredUserSearchFilter> {
-    /**
-     * email and username are the same
-     *
-     * @param username
-     * @return
-     */
-    RegisteredUser getByUsername(String username);
+	/**
+	 * email and username are the same
+	 *
+	 * @param username
+	 * @return
+	 */
+	RegisteredUser getByUsername(String username);
 
-    List<RegisteredUser> findAllUsersByEnabled();
+	List<RegisteredUser> findAllUsersByEnabled();
 
-    RegisteredUser getUserByPromoCode(String promoCode);
+	RegisteredUser getUserByPromoCode(String promoCode);
 
-    List<RegisteredUser> getByFirstName(String firstName);
+	List<RegisteredUser> getByFirstName(String firstName);
 
-    List<RegisteredUser> getByReferralCode(String refCode);
+	List<RegisteredUser> getByReferralCode(String refCode);
 
-    Set<RegisteredUser> getByEmailLike(String passedEmail);
+	Set<RegisteredUser> getByEmailLike(String passedEmail);
 
-    Set<RegisteredUser> getByEmailLikeAndCreatedBy(String s, Long id);
+	Set<RegisteredUser> getByEmailLikeAndCreatedBy(String s, Long id);
 }
