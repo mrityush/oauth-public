@@ -15,16 +15,19 @@ import javax.persistence.*;
 @Data
 public class UserAuthority extends CommonDataEntity implements GrantedAuthority {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(referencedColumnName = "username", name = "username")
-	private RegisteredUser user;
-	private String authority;// TODO can have multiple authorites but right now not handling..
+	@JoinColumn(referencedColumnName = "email", name = "email")
+	private User user;
+	@Column
+	private String authority;
 
 	public UserAuthority() {
 	}
 
-	public UserAuthority(RegisteredUser user, String name) {
-		this.user = user;
+	public UserAuthority(String name) {
 		this.authority = name;
 	}
 
@@ -33,7 +36,4 @@ public class UserAuthority extends CommonDataEntity implements GrantedAuthority 
 		return authority;
 	}
 
-	public RegisteredUser getUser() {
-		return user;
-	}
 }

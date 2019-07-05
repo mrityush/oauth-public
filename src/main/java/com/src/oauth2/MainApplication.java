@@ -16,6 +16,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -24,6 +25,7 @@ import java.util.Locale;
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
+@EnableSwagger2
 @ComponentScan("com.src.oauth2.*")
 @EnableConfigurationProperties(AppProperties.class)
 

@@ -2,6 +2,7 @@ package com.src.oauth2.controller;
 
 import com.src.oauth2.domain.AuthProvider;
 import com.src.oauth2.domain.User;
+import com.src.oauth2.domain.UserAuthority;
 import com.src.oauth2.exception.BadRequestException;
 import com.src.oauth2.payload.ApiResponse;
 import com.src.oauth2.payload.AuthResponse;
@@ -16,14 +17,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashSet;
 
 @RestController
 @RequestMapping("/auth")
@@ -69,7 +68,7 @@ public class AuthController {
 		user.setEmail(signUpRequest.getEmail());
 		user.setPassword(signUpRequest.getPassword());
 		user.setProvider(AuthProvider.local);
-
+		user.setAuthorities(new HashSet<UserAuthority>(){{add(new UserAuthority("ROLE_USER"));}});
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		User result = userRepository.save(user);
@@ -80,6 +79,12 @@ public class AuthController {
 
 		return ResponseEntity.created(location)
 				.body(new ApiResponse(true, "User registered successfully@"));
+	}
+
+	@PostMapping("/enticate")
+	public  ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization){
+		return ResponseEntity.ok()
+				.body(new ApiResponse(true, "will see"));
 	}
 
 }
