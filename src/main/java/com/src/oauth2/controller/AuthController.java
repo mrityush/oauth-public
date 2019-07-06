@@ -4,12 +4,11 @@ import com.src.oauth2.domain.AuthProvider;
 import com.src.oauth2.domain.User;
 import com.src.oauth2.domain.UserAuthority;
 import com.src.oauth2.exception.BadRequestException;
-import com.src.oauth2.payload.ApiResponse;
-import com.src.oauth2.payload.AuthResponse;
-import com.src.oauth2.payload.LoginRequest;
-import com.src.oauth2.payload.SignUpRequest;
+import com.src.oauth2.payload.*;
 import com.src.oauth2.repositories.UserRepository;
+import com.src.oauth2.security.CurrentUser;
 import com.src.oauth2.security.TokenProvider;
+import com.src.oauth2.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,7 +67,9 @@ public class AuthController {
 		user.setEmail(signUpRequest.getEmail());
 		user.setPassword(signUpRequest.getPassword());
 		user.setProvider(AuthProvider.local);
-		user.setAuthorities(new HashSet<UserAuthority>(){{add(new UserAuthority("ROLE_USER"));}});
+		user.setAuthorities(new HashSet<UserAuthority>() {{
+			add(new UserAuthority("ROLE_USER"));
+		}});
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		User result = userRepository.save(user);
@@ -82,9 +83,12 @@ public class AuthController {
 	}
 
 	@PostMapping("/enticate")
-	public  ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization){
-		return ResponseEntity.ok()
-				.body(new ApiResponse(true, "will see"));
+	public ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization,
+										  @CurrentUser UserPrincipal userPrincipal) {
+		PrincipalResponse principalResponse = new PrincipalResponse();
+		principalResponse.setId(userPrincipal.getId());
+		principalResponse.setAuthorities(userPrincipal.getAuthorities());
+		return ResponseEntity.ok().body(principalResponse);
 	}
 
 }
