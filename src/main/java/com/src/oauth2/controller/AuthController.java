@@ -4,10 +4,7 @@ import com.src.oauth2.domain.AuthProvider;
 import com.src.oauth2.domain.User;
 import com.src.oauth2.domain.UserAuthority;
 import com.src.oauth2.exception.BadRequestException;
-import com.src.oauth2.payload.ApiResponse;
-import com.src.oauth2.payload.AuthResponse;
-import com.src.oauth2.payload.LoginRequest;
-import com.src.oauth2.payload.SignUpRequest;
+import com.src.oauth2.payload.*;
 import com.src.oauth2.repositories.UserRepository;
 import com.src.oauth2.security.CurrentUser;
 import com.src.oauth2.security.TokenProvider;
@@ -87,13 +84,14 @@ public class AuthController {
 	}
 
 	@PostMapping("/enticate")
-	public ResponseEntity<?> authenticate(@CurrentUser UserPrincipal userPrincipal) {
-//	public  ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization){
+	public ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization,
+										  @CurrentUser UserPrincipal userPrincipal) {
 		if (userPrincipal == null)
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(false, "User not Found or not authenticated."));
-		// todo may need to add user information / role in response
-		return ResponseEntity.ok()
-				.body(new ApiResponse(true, "will see"));
+		PrincipalResponse principalResponse = new PrincipalResponse();
+		principalResponse.setId(userPrincipal.getId());
+		principalResponse.setAuthorities(userPrincipal.getAuthorities());
+		return ResponseEntity.ok().body(principalResponse);
 	}
 
 }

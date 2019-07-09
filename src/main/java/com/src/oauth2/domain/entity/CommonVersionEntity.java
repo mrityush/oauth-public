@@ -1,5 +1,7 @@
 package com.src.oauth2.domain.entity;
 
+import com.src.oauth2.constants.ApplicationConstant;
+import com.src.oauth2.utils.DateTimeUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -32,6 +34,10 @@ public abstract class CommonVersionEntity implements BaseEntity {
 	@Column
 	private Long updatedBy;
 
+	public CommonVersionEntity() {
+		setDateCreated(DateTimeUtils.getCurrentDate());
+		setCreatedBy(ApplicationConstant.SYSTEM_ID);
+	}
 
 	public Long getCreatedBy() {
 		return createdBy;
