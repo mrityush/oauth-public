@@ -91,6 +91,7 @@ public class AuthController {
 //	public  ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization){
 		if (userPrincipal == null)
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(false, "User not Found or not authenticated."));
+		// todo may need to add user information / role in response
 		return ResponseEntity.ok()
 				.body(new ApiResponse(true, "will see"));
 	}
