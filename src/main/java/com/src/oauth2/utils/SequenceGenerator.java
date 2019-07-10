@@ -1,5 +1,7 @@
-package com.src.oauth2.controller;
+package com.src.oauth2.utils;
 
+
+import org.springframework.stereotype.Component;
 
 import java.net.NetworkInterface;
 import java.security.SecureRandom;
@@ -7,12 +9,24 @@ import java.time.Instant;
 import java.util.Enumeration;
 
 /**
+ * todo
+ *
  * Distributed Sequence Generator.
  * Inspired by Twitter snowflake: https://github.com/twitter/snowflake/tree/snowflake-2010
  * <p>
  * This class should be used as a Singleton.
- * Make sure that you create and reuse a Single instance of SequenceGenerator per machine in your distributed system cluster.
+ * Make sure that you create and reuse a Single instance of
+ * SequenceGenerator per machine in your distributed system cluster.
+ *
+ * referring this link https://stackoverflow.com/questions/2671858/distributed-sequence-number-generation
+ *
+ * The most significant 40 or so bits: A timestamp; the generation time of the ID. (We're using the most significant bits for the timestamp to make IDs sort-able by generation time.)
+ *
+ * The next 14 or so bits: A per-generator counter, which each generator increments by one for each new ID generated. This ensures that IDs generated at the same moment (same timestamps) do not overlap.
+ *
+ * The last 10 or so bits: A unique value for each generator. Using this, we don't need to do any synchronization between generators (which is extremely hard), as all generators produce non-overlapping IDs because of this value.
  */
+@Component
 public class SequenceGenerator {
 	private static final int TOTAL_BITS = 64;
 	private static final int EPOCH_BITS = 42;
