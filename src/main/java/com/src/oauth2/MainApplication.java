@@ -89,20 +89,6 @@ public class MainApplication extends WebMvcConfigurerAdapter {
 		return ds;
 	}
 
-	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-		lci.setParamName("lang");
-		return lci;
-	}
-
-	@Bean
-	public LocaleResolver localeResolver() {
-		SessionLocaleResolver slr = new SessionLocaleResolver();
-		slr.setDefaultLocale(Locale.US);
-		return slr;
-	}
-
 //	@Bean
 //	JedisConnectionFactory jedisConnectionFactory() {
 //		JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
