@@ -25,7 +25,10 @@ public class User extends CommonVersionEntity implements Serializable {
 	private Long id;
 
 	@Column(nullable = false)
-	private String name;
+	private String firstName;
+
+	@Column
+	private String lastName;
 
 	@Email
 	@Column(nullable = false)
