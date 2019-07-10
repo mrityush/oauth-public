@@ -84,8 +84,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/enticate")
-	public ResponseEntity<?> authenticate(@RequestHeader("authorization") String authorization,
-										  @CurrentUser UserPrincipal userPrincipal) {
+	public ResponseEntity<?> authenticate(@CurrentUser UserPrincipal userPrincipal) {
 		if (userPrincipal == null)
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(false, "User not Found or not authenticated."));
 		PrincipalResponse principalResponse = new PrincipalResponse();
