@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public UserDTO registerUser(UserCO userCO) {
+	public UserDTO registerUserAndSendToProfileService(UserCO userCO) {
 		userCO.setPassword(passwordEncoder.encode(userCO.getPassword()));
 		User user = modelMapper.map(userCO, User.class);
 		user.setAuthorities(new HashSet<UserAuthority>() {{

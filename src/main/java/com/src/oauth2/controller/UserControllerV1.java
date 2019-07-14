@@ -34,7 +34,7 @@ public class UserControllerV1 {
 
 	@PostMapping("/v1/register")
 	public UserDTO registerUser(@RequestBody UserCO userCO) {
-		return userService.registerUser(userCO);
+		return userService.registerUserAndSendToProfileService(userCO);
 	}
 
 	@PostMapping("/v1/login")

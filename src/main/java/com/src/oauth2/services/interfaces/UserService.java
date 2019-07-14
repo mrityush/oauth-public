@@ -16,7 +16,7 @@ public interface UserService {
 
 	String getReferralCodeForUser(RegisteredUser user);
 
-	UserDTO registerUser(UserCO userCO);
+	UserDTO registerUserAndSendToProfileService(UserCO userCO);
 
 	ResponseEntity<?> loginUser(UserLoginCO userLoginCO);
 }
