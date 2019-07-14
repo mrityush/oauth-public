@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public UserDTO registerUser(UserCO userCO) {
+	public UserDTO registerUserAndSendToProfileService(UserCO userCO) {
 		userCO.setPassword(passwordEncoder.encode(userCO.getPassword()));
 		User user = modelMapper.map(userCO, User.class);
 		user.setAuthorities(new HashSet<UserAuthority>() {{
@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserService {
 		user.setVersion(0L);
 		user.setProvider(AuthProvider.local);
 		user = userRepository.save(user);
+		// in our case, an async call to enter user address information can be done
+
 		return modelMapper.map(user, UserDTO.class);
 	}
 
