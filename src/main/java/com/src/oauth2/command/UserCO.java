@@ -2,10 +2,14 @@ package com.src.oauth2.command;
 
 import lombok.Data;
 
+import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class UserCO {
+public class UserCO implements Serializable {
+	@Id
+	private String id;
 	private String lastName;
 	private String country;
 	private String address;

@@ -15,6 +15,7 @@ import com.src.oauth2.services.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,8 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private HttpChannel httpChannel;
+	@Autowired
+	private MongoOperations mongoOperations2;
 
 	@Override
 	public void sendWelcomeEmail(UserAuthority userAuthority) {
@@ -70,7 +73,7 @@ public class UserServiceImpl implements UserService {
 			log.debug("Sending profile info to queue resulted in result : {} ", sendResult);
 		} catch (Exception e) {
 			log.error("Error in push user profile details to queue. Will try profile processing again." + e);
-//			mongoTemplate.saveUserCo(userCO);
+			UserCO userCO1 = mongoOperations2.insert(userCO);
 		}
 		return modelMapper.map(user, UserDTO.class);
 	}
