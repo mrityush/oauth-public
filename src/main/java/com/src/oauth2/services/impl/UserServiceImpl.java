@@ -3,6 +3,7 @@ package com.src.oauth2.services.impl;
 import com.src.oauth2.command.UserCO;
 import com.src.oauth2.command.UserLoginCO;
 import com.src.oauth2.controller.AuthControllerV1;
+import com.src.oauth2.datachannels.HttpChannel;
 import com.src.oauth2.domain.AuthProvider;
 import com.src.oauth2.domain.RegisteredUser;
 import com.src.oauth2.domain.User;
@@ -11,6 +12,7 @@ import com.src.oauth2.dto.UserDTO;
 import com.src.oauth2.payload.LoginRequest;
 import com.src.oauth2.repositories.UserRepository;
 import com.src.oauth2.services.interfaces.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import java.util.HashSet;
  * 27/6/19 4:21 PM
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
@@ -35,6 +38,9 @@ public class UserServiceImpl implements UserService {
 	AuthControllerV1 authControllerV1;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private HttpChannel httpChannel;
+
 	@Override
 	public void sendWelcomeEmail(UserAuthority userAuthority) {
 
@@ -57,6 +63,15 @@ public class UserServiceImpl implements UserService {
 		user.setVersion(0L);
 		user.setProvider(AuthProvider.local);
 		user = userRepository.save(user);
+		// todo ... in case the userCO is not sent to queue,
+		//  we will have to persist the userCO to a nosql for later processing
+		try {
+			Boolean sendResult = httpChannel.sendCoToSaveProfile(userCO);
+			log.debug("Sending profile info to queue resulted in result : {} ", sendResult);
+		} catch (Exception e) {
+			log.error("Error in push user profile details to queue. Will try profile processing again." + e);
+//			mongoTemplate.saveUserCo(userCO);
+		}
 		return modelMapper.map(user, UserDTO.class);
 	}
 
