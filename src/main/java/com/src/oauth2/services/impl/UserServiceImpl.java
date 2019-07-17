@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * oauth2
@@ -59,8 +60,11 @@ public class UserServiceImpl implements UserService {
 	public UserDTO registerUserAndSendToProfileService(UserCO userCO) {
 		userCO.setPassword(passwordEncoder.encode(userCO.getPassword()));
 		User user = modelMapper.map(userCO, User.class);
+		com.src.oauth2.enums.UserAuthority userAuthority = (Objects.isNull(userCO.getUserRole())) ?
+				com.src.oauth2.enums.UserAuthority.USER :
+				com.src.oauth2.enums.UserAuthority.valueOf(userCO.getUserRole());
 		user.setAuthorities(new HashSet<UserAuthority>() {{
-			add(new UserAuthority(com.src.oauth2.enums.UserAuthority.USER.getDescription()));
+			add(new UserAuthority(userAuthority.getDescription()));
 		}});
 		user.setEmailVerified(false);
 		user.setVersion(0L);

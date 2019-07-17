@@ -24,6 +24,7 @@ public class ApplicationConstant {
 	public static final String X_AUTH_TOKEN = "authorization";
 	public static final Integer SERVER_ERROR = 500;
 	public static final Integer SERVER_OK = 200;
+	public static final String[] ALLOWED_URL_PHRASES = {"/swagger", "swagger-ui", "/tnc", "/policy", "/favicon.ico", "/api-docs", "/configuration/"};
 	public static final String IPADDRESS_PATTERN =
 			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 					"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +

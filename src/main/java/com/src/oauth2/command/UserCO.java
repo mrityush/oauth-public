@@ -24,5 +24,7 @@ public class UserCO implements Serializable {
 	private String category;
 	private String email;
 	private String username;
+	private Integer language;
+	private Integer userRole;
 	private Date timestamp;
 }

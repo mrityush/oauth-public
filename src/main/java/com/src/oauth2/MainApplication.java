@@ -22,7 +22,7 @@ import java.util.Collections;
 @EnableScheduling
 @EnableAsync
 @EnableSwagger2
-@ComponentScan("com.src.oauth2.*")
+@ComponentScan("com.src")
 @EnableConfigurationProperties(AppProperties.class)
 
 //public class MainApplication {
