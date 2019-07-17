@@ -10,6 +10,7 @@ import com.src.oauth2.utils.ApiRequestBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class HttpChannel {
 	private ObjectMapper objectMapper;
 	@Autowired
 	private ModelMapper modelMapper;
+	@Value("${profile.queue.name}")
+	private String profileQueue;
 
 	public Boolean sendCoToSaveProfile(UserCO userCO) throws JsonProcessingException {
 //		UriComponentsBuilder builder = UriComponentsBuilder
@@ -39,7 +42,7 @@ public class HttpChannel {
 		requestBuilderDTO.setUrl("http://" + httpConfiguration.getBusServiceUrl() + "/v1/bus");
 		requestBuilderDTO.setHttpMethod(HttpMethod.POST);
 		QueueAndMessageDto queueAndMessageDto = new QueueAndMessageDto();
-		queueAndMessageDto.setTopic("dummy");
+		queueAndMessageDto.setTopic(profileQueue);
 		queueAndMessageDto.setMessage(userCO);
 		requestBuilderDTO.setRequestBody(objectMapper.convertValue(queueAndMessageDto, Map.class));
 		ResponseEntity<Map> response = apiRequestBuilder.executeRequest(requestBuilderDTO, Map.class);
