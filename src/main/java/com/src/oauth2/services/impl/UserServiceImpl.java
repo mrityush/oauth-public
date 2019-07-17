@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
 		user.setVersion(0L);
 		user.setProvider(AuthProvider.local);
 		user = userRepository.save(user);
+		userCO.setId(user.getId());
 		// todo ... in case the userCO is not sent to queue,
 		//  we will have to persist the userCO to a nosql for later processing
 		try {

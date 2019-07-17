@@ -9,7 +9,8 @@ import java.util.Date;
 @Data
 public class UserCO implements Serializable {
 	@Id
-	private String id;
+	private String uId;
+	private Long id;
 	private String lastName;
 	private String country;
 	private String address;
