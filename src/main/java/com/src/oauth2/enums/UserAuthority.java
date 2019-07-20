@@ -12,8 +12,10 @@ import java.util.Map;
  */
 @Getter
 public enum UserAuthority {
-	USER(0, "ROLE_USER"),
-	ADMIN(1, "ROLE_ADMIN");
+	ADMIN(0, "ADMIN_ROLE"),
+	SERVICE_PROVIDER(1, "SERVICE_PROVIDER_ROLE"),
+	GOODS_PROVIDER(2, "GOODS_PROVIDER_ROLE"),
+	USER(3, "USER_ROLE");
 
 	Integer value;
 	String description;
