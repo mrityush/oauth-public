@@ -7,10 +7,10 @@ import org.apache.http.HttpStatus;
  */
 public class ErrorResponseDTO extends RequestResponseDTO {
 	public ErrorResponseDTO() {
-		super("Failure in Action", HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
+		super("Failure in Action", HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 
 	public ErrorResponseDTO(String message) {
-		super(message, HttpStatus.SC_INTERNAL_SERVER_ERROR, true);
+		super(message, HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 }

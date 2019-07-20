@@ -9,26 +9,28 @@ import lombok.Data;
 public class RequestResponseDTO {
 	private String message;
 	private Integer status;
-	private boolean isActionDone;
+	private Long timeStamp;
 	private Object data;
 	private String nextCursor;
 
 	public RequestResponseDTO() {
 		status = 200;
 		message = "dummy Message";
-		isActionDone = false;
+		timeStamp = System.currentTimeMillis();
 	}
 
-	public RequestResponseDTO(boolean b) {
+	public RequestResponseDTO(String message) {
 		status = 200;
-		message = "dummy Message";
-		isActionDone = b;
+		this.message = message;
+		timeStamp = System.currentTimeMillis();
 	}
 
-	public RequestResponseDTO(String message, int status, boolean actionDone) {
-		this.status = status;
+	public RequestResponseDTO(String message, int status) {
+		status = status;
 		this.message = message;
-		isActionDone = actionDone;
+		timeStamp = System.currentTimeMillis();
 	}
+
+
 
 }

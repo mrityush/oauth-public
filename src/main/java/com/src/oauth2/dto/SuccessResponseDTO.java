@@ -7,10 +7,10 @@ import org.apache.http.HttpStatus;
  */
 public class SuccessResponseDTO extends RequestResponseDTO {
 	public SuccessResponseDTO() {
-		super("Success in Action", HttpStatus.SC_OK, true);
+		super("Success in Action", HttpStatus.SC_OK);
 	}
 
 	public SuccessResponseDTO(String message) {
-		super(message, HttpStatus.SC_OK, true);
+		super(message, HttpStatus.SC_OK);
 	}
 }
