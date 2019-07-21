@@ -159,7 +159,7 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     compile 'org.projectlombok:lombok:1.16.18'
-    compile 'co-dto:repo:1.0.2'
+    compile 'co-dto:repo:1.0.8'
     //compile('org.springframework.cloud:spring-cloud-starter-config')
 
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.3'
