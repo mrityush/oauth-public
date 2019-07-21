@@ -9,6 +9,9 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        maven {
+            url 'http://192.168.43.129:8780/repository/internal'
+        }
     }
 
     dependencies {
@@ -39,7 +42,11 @@ repositories {
         url 'https://repo.spring.io/libs-snapshot'
     }
     maven {
-        url  "http://dl.bintray.com/dmahapatro/plugins"
+        url "http://dl.bintray.com/dmahapatro/plugins"
+    }
+    maven {
+        // this is local machine's ip, allocated when used mobile wifi
+        url 'http://192.168.43.129:8780/repository/internal'
     }
 }
 
@@ -152,7 +159,7 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     compile 'org.projectlombok:lombok:1.16.18'
-
+    compile 'co-dto:repo:1.0.2'
     //compile('org.springframework.cloud:spring-cloud-starter-config')
 
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.3'
@@ -220,7 +227,7 @@ task cleanDist(type: Delete) {
 }
 
 task CopyTask(type: Copy) {
-    from('build/libs'){
+    from('build/libs') {
         include '*.jar'
     }
     from('.') {
