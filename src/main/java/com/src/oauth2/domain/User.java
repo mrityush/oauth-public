@@ -1,28 +1,24 @@
 package com.src.oauth2.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.src.oauth2.domain.entity.CommonVersionEntity;
+import com.src.oauth2.domain.entity.CommonDataEntity;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "email")
 })
 @Data
-public class User extends CommonVersionEntity implements Serializable {
+public class User extends CommonDataEntity implements Serializable {
 	public User() {
 		super();
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
 	@Column(nullable = false)
 	private String firstName;
@@ -49,7 +45,6 @@ public class User extends CommonVersionEntity implements Serializable {
 	@Column
 	private String providerId;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(referencedColumnName = "email")
-	private Set<UserAuthority> authorities;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private UserAuthority authorities;
 }

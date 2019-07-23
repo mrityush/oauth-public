@@ -21,8 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * oauth2
@@ -60,12 +62,8 @@ public class UserServiceImpl implements UserService {
 	public UserDTO registerUserAndSendToProfileService(UserCO userCO) {
 		userCO.setPassword(passwordEncoder.encode(userCO.getPassword()));
 		User user = modelMapper.map(userCO, User.class);
-		com.src.oauth2.enums.UserAuthority userAuthority = (Objects.isNull(userCO.getUserRole())) ?
-				com.src.oauth2.enums.UserAuthority.USER :
-				com.src.oauth2.enums.UserAuthority.valueOf(userCO.getUserRole());
-		user.setAuthorities(new HashSet<UserAuthority>() {{
-			add(new UserAuthority(userAuthority.getDescription()));
-		}});
+		String userAuthorityStr = getUserAuthoritesStr(userCO);
+		user.setAuthorities(new UserAuthority(userAuthorityStr, user));
 		user.setEmailVerified(false);
 		user.setVersion(0L);
 		user.setProvider(AuthProvider.local);
@@ -81,6 +79,21 @@ public class UserServiceImpl implements UserService {
 			UserCO userCO1 = mongoOperations2.insert(userCO);
 		}
 		return modelMapper.map(user, UserDTO.class);
+	}
+
+	private String getUserAuthoritesStr(UserCO userCO) {
+		StringBuilder authStr = new StringBuilder();
+		com.src.oauth2.enums.UserAuthority userAuthority;
+		if (Objects.isNull(userCO.getUserRole())) {
+			userAuthority = com.src.oauth2.enums.UserAuthority.USER;
+			authStr.append(userAuthority.getDescription());
+		} else {
+			List<Integer> authoritiesIds = (Arrays.stream(userCO.getUserRole().split(",")).map(Integer::valueOf)).collect(Collectors.toList());
+			for (Integer authId : authoritiesIds) {
+				authStr.append(com.src.oauth2.enums.UserAuthority.valueOf(authId).getDescription()).append(",");
+			}
+		}
+		return authStr.toString();
 	}
 
 	@Override
